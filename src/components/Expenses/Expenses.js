@@ -1,22 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import ExpenseItem from './ExpenseItem';
-import Card from '../UI/Card';
-import ExpensesFilter from './ExpensesFilter';
-import './Expenses.css';
+import ExpensesList from "./ExpensesList";
+import Card from "../UI/Card";
+import ExpensesFilter from "./ExpensesFilter";
+import "./Expenses.css";
 
 const Expenses = (props) => {
-  const [filteredYear, setFilteredYear] = useState('2020');
+  const [filteredYear, setFilteredYear] = useState("2020");
 
-  const filterChangeHandler = selectedYear => {
+  const filterChangeHandler = (selectedYear) => {
     setFilteredYear(selectedYear);
   };
 
+  const filteredExpenses = props.items.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
+
+  
+
   return (
     <div>
-      <Card className='expenses'>
-        <ExpensesFilter selected={filteredYear} onChangeFilter={filterChangeHandler} />
-        <ExpenseItem
+      <Card className="expenses">
+        <ExpensesFilter
+          selected={filteredYear}
+          onChangeFilter={filterChangeHandler}
+        />
+        <ExpensesList items={filteredExpenses}/>
+        {/* key is always important to add while mapping items to stay away from bugs and performance issues */}
+        {/* {filteredExpenses.length === 0 ? (
+          <p> No Expenses found</p>
+        ) : (
+          filteredExpenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              amount={expense.amount}
+              date={expense.date}
+            />
+          ))
+        )} */}
+
+        {/* <ExpenseItem
           title={props.items[0].title}
           amount={props.items[0].amount}
           date={props.items[0].date}
@@ -35,7 +59,7 @@ const Expenses = (props) => {
           title={props.items[3].title}
           amount={props.items[3].amount}
           date={props.items[3].date}
-        />
+        /> */}
       </Card>
     </div>
   );
